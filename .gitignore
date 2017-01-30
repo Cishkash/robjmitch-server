@@ -1,0 +1,16 @@
+# Modules!
+node_modules
+
+# Super secrets!
+.env
+
+# Firebase
+database.rules.json
+firebase.json
+.firebaserc
+
+# Logs
+npm-debug.log
+
+# Public
+public
