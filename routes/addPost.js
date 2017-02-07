@@ -6,7 +6,7 @@ router.get('/', function(req, res, next) {
   function writeUserData(userId, name, email, imageUrl) {
     // Firebase doesn't automatically send a response with set so we create one
     return new Promise( (resolve, reject) => {
-      let postUser = firebase.database().ref('users/' + userId).set({
+      let postUser = firebase.database().ref('posts/').set({
         name: name,
         email: email,
         image: imageUrl
@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
   }
 
   // These are just test parameters
-  writeUserData(120, 'Robby', 'robjmitch@derp.com', 'kitty').then(
+  writeUserData().then(
     // Resolved `.set()`
     () => {
       res.send('Posted!');

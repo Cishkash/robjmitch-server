@@ -3,12 +3,12 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', function(req, res, next) {
-  function fetchUsers() {
-    var fetchPosts = firebase.database().ref('posts/');
+  function fetchBlogs() {
+    var fetchBlogs = firebase.database().ref('blogs/');
     return new Promise( (resolve, reject) => {
-      fetchPosts.on('value', (posts) => {
-        if (posts) {
-          resolve(posts.val());
+      fetchBlogs.on('value', (blogs) => {
+        if (blogs) {
+          resolve(blogs.val());
         } else {
           reject();
         }
@@ -16,9 +16,9 @@ router.get('/', function(req, res, next) {
     });
   }
 
-  fetchUsers().then(
-    posts => {
-      res.send(posts);
+  fetchBlogs().then(
+    blogs => {
+      res.send(blogs);
     }, () => {
       res.send('Failed');
     }
