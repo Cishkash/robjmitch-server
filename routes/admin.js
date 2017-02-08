@@ -3,9 +3,26 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/login', function(req, res, next) {
-  firebase.auth().signInWithEmailAndPassword(email, password).catch( (err) => {
-    res.send(err.code, err.message);
-  });
+  function invalidResponse(message) {
+    this.message = message;
+    this.statusCode = 500;
+  }
+
+  firebase.auth().signInWithEmailAndPassword(req.query.email, req.query.password).then(
+    (response) => {
+      // Handle a successful request (200) with an unsuccessful login
+      if (response.code) {
+        throw new Error(response.message);
+      }
+      // Handle successful login
+      res.send({
+        message: "You were successfully logged in!",
+        success: true
+      });
+    }, (err) => {
+      res.status(500).send(err);
+    }
+  )
 });
 
 router.get('/logout', function(req, res, next) {
@@ -20,17 +37,16 @@ router.get('/logout', function(req, res, next) {
 
 router.get('/addPost', function(req, res, next) {
   const timestamp = new Date();
-  const
-  
-  function writeUserData(userId, name, email, imageUrl) {
+
+  function writeBlogrData(title, image, body, id, author) {
     // Firebase doesn't automatically send a response with set so we create one
     return new Promise( (resolve, reject) => {
-      let postUser = firebase.auth().database().ref('posts/').set({
-        name: name,
-        email: email,
-        image: imageUrl
+      let postBlog = firebase.database().ref('posts/').set({
+        title: title,
+        image: image,
+        body: id
       });
-      if (postUser) {
+      if (postBlog) {
         resolve();
       } else {
         reject();
@@ -39,13 +55,13 @@ router.get('/addPost', function(req, res, next) {
   }
 
   // These are just test parameters
-  writeUserData().then(
+  writeBlogData().then(
     // Resolved `.set()`
     () => {
-      res.send('Posted!');
+      res.send('Success');
     // Rejected `.set()`
-    }, (ex) => {
-      res.send('postUser failed:', ex);
+    }, (err) => {
+      res.send('Blog post failed:', err);
     }
   );
 });
