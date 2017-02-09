@@ -3,11 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/login', function(req, res, next) {
-  function invalidResponse(message) {
-    this.message = message;
-    this.statusCode = 500;
-  }
-
   firebase.auth().signInWithEmailAndPassword(req.query.email, req.query.password).then(
     (response) => {
       // Handle a successful request (200) with an unsuccessful login
@@ -35,16 +30,27 @@ router.get('/logout', function(req, res, next) {
   );
 });
 
-router.get('/addPost', function(req, res, next) {
+router.get('/currentuser', function(req, res, next) {
+  firebase.auth().onAuthStateChanged( (user) => {
+    if (user) {
+      res.send({success: true});
+    } else {
+      res.status(500).send({success: false});
+    }
+  });
+});
+
+router.post('/addblog', function(req, res, next) {
   const timestamp = new Date();
 
-  function writeBlogrData(title, image, body, id, author) {
+  function writeBlogrData(title, body, timestamp) {
     // Firebase doesn't automatically send a response with set so we create one
     return new Promise( (resolve, reject) => {
       let postBlog = firebase.database().ref('posts/').set({
+        body: body,
+        image: 'images/ribby.jpg',
         title: title,
-        image: image,
-        body: id
+        timestamp: timestamp
       });
       if (postBlog) {
         resolve();
@@ -55,7 +61,7 @@ router.get('/addPost', function(req, res, next) {
   }
 
   // These are just test parameters
-  writeBlogData().then(
+  writeBlogData(title, body, timestamp).then(
     // Resolved `.set()`
     () => {
       res.send('Success');
