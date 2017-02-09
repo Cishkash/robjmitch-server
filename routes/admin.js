@@ -21,9 +21,12 @@ router.get('/login', function(req, res, next) {
 });
 
 router.get('/logout', function(req, res, next) {
-  firebase.auth().signout().then(
-    () => {
-      res.send('Signout was successful!');
+  console.log('Logging out');
+  firebase.auth().signOut().then(
+    (response) => {
+      console.log(response);
+      // if (response ) throw response
+      res.send({ message: 'Log out successful'});
     }, (err) => {
       res.send(err);
     }
