@@ -44,35 +44,41 @@ router.get('/currentuser', function(req, res, next) {
 });
 
 router.post('/addblog', function(req, res, next) {
-  const timestamp = new Date();
+  const title = req.body.title;
 
-  function writeBlogrData(title, body, timestamp) {
-    // Firebase doesn't automatically send a response with set so we create one
-    return new Promise( (resolve, reject) => {
-      let postBlog = firebase.database().ref('posts/').set({
-        body: body,
-        image: 'images/ribby.jpg',
-        title: title,
-        timestamp: timestamp
+  function writeBlogData() {
+    const blogBody = req.body.blogBody;
+
+    // Push a blogs entry
+    firebase.database().ref().child('blogs').push({
+      body: blogBody,
+      image: 'images/ribby.jpg',
+      title: title
+    }).then( (blogPost) => {
+      // When resolved push a posts entry
+      writePostData(blogPost.key).then( () => {
+        res.send({message: 'Blog posted'})
+      }, (err) => {
+        res.status(500).send(err);
       });
-      if (postBlog) {
-        resolve();
-      } else {
-        reject();
-      }
+    }, (err) => {
+      res.status(500).send(err);
     });
   }
 
-  // These are just test parameters
-  writeBlogData(title, body, timestamp).then(
-    // Resolved `.set()`
-    () => {
-      res.send('Success');
-    // Rejected `.set()`
-    }, (err) => {
-      res.send('Blog post failed:', err);
-    }
-  );
+  // Posts a blog post article
+  function writePostData(blogPostKey) {
+    const postAuthor = req.body.postAuthor;
+    const postBody = req.body.postBody;
+
+    return firebase.database().ref().child('posts/'+ blogPostKey).set({
+      body: postBody,
+      author: postAuthor,
+      title: title
+    });
+  }
+
+  writeBlogData();
 });
 
 module.exports = router;
