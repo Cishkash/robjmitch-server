@@ -7,10 +7,12 @@ router.get('/', function(req, res, next) {
     var fetchBlogs = firebase.database().ref('blogs/');
     return new Promise( (resolve, reject) => {
       fetchBlogs.on('value', (blogs) => {
-        if (blogs) {
+        if (blogs && blogs.val() !== null) {
           resolve(blogs.val());
+        } else if (blogs.val() === null) {
+          reject(404);
         } else {
-          reject();
+          reject(500);
         }
       });
     });
@@ -19,8 +21,12 @@ router.get('/', function(req, res, next) {
   fetchBlogs().then(
     blogs => {
       res.send(blogs);
-    }, () => {
-      res.send('Failed');
+    }, (err) => {
+      if (err === 404) {
+        res.status(err).send({message: 'Could not find blog entries'});
+      } else {
+        res.status(err).send({message: 'Failed to fetch blog entries'});
+      }
     }
   )
 });

@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/:post_id', function(req, res, next) {
   function fetchPost() {
-    var fetchPost = firebase.database().ref('post/' + req.params.post_id);
+    const fetchPost = firebase.database().ref('posts/' + req.params.post_id);
     return new Promise( (resolve, reject) => {
       fetchPost.on('value', (post) => {
         if (post) {
@@ -17,10 +17,10 @@ router.get('/:post_id', function(req, res, next) {
   }
 
   fetchPost().then(
-    post => {
+    (post) => {
       res.send(post);
-    }, () => {
-      res.send('Failed');
+    }, (err) => {
+      res.status(404).send(err);
     }
   )
 });
