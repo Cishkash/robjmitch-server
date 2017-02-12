@@ -2,45 +2,41 @@ const firebase = require('firebase');
 const express = require('express');
 const router = express.Router();
 
-router.get('/login', function(req, res, next) {
-  firebase.auth().signInWithEmailAndPassword(req.query.email, req.query.password).then(
+router.post('/login', function(req, res, next) {
+  firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then(
     (response) => {
-      // Handle a successful request (200) with an unsuccessful login
-      if (response.code) {
-        throw new Error(response.message);
-      }
       // Handle successful login
       res.send({
         message: "You were successfully logged in!",
         success: true
       });
-    }, (err) => {
-      res.status(500).send(err);
     }
-  )
+  ).catch( (err) => {
+    res.status(err.status).send(err.message);
+  })
 });
 
 router.get('/logout', function(req, res, next) {
-  console.log('Logging out');
   firebase.auth().signOut().then(
     (response) => {
-      console.log(response);
-      // if (response ) throw response
       res.send({ message: 'Log out successful'});
     }, (err) => {
-      res.send(err);
+      throw new Error();
     }
-  );
+  ).catch( (err) => {
+    res.status(500).send(err);
+  });
 });
 
 router.get('/currentuser', function(req, res, next) {
-  firebase.auth().onAuthStateChanged( (user) => {
-    if (user) {
-      res.send({success: true});
-    } else {
-      res.status(500).send({success: false});
-    }
-  });
+  const user = firebase.auth().currentUser;
+  if (user) {
+    res.status(200).send({ message: 'User is signed in' });
+  } else if (user === null) {
+    res.status(404).send ({ message: 'User is not logged in.' });
+  } else {
+    res.status(500).send({ message: 'Failed to find a user' })
+  }
 });
 
 router.post('/addblog', function(req, res, next) {
