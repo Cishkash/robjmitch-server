@@ -5,15 +5,13 @@ const router = express.Router();
 router.post('/login', function(req, res, next) {
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then(
     (response) => {
-      // Handle successful login
-      res.send({
-        message: "You were successfully logged in!",
-        success: true
-      });
+      res.status(200).send(response);
     }
-  ).catch( (err) => {
-    res.status(err.status).send(err.message);
-  })
+  ).catch(
+    (err) => {
+      res.status(404).send(err);
+    }
+  );
 });
 
 router.get('/logout', function(req, res, next) {
