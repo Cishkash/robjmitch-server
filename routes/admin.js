@@ -31,7 +31,7 @@ router.get('/currentuser', function(req, res, next) {
   if (user) {
     res.status(200).send({ message: 'User is signed in' });
   } else if (user === null) {
-    res.status(404).send ({ message: 'User is not logged in.' });
+    res.status(401).send ({ message: 'You are not authorized' });
   } else {
     res.status(500).send({ message: 'Failed to find a user' })
   }
@@ -46,7 +46,7 @@ router.post('/addblog', function(req, res, next) {
     // Push a blogs entry
     firebase.database().ref().child('blogs').push({
       body: blogBody,
-      image: 'images/ribby.jpg',
+      image: '/images/ribby.jpg',
       title: title
     }).then( (blogPost) => {
       // When resolved push a posts entry
