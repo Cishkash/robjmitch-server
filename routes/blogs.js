@@ -9,6 +9,8 @@ router.get('/', function(req, res, next) {
         console.log('Hit resolve');
         res.send(blogs.val());
       } else if (blogs.val() === null) {
+        // @TODO Consider sending this as a 200 as it is not entirely a falsy
+        //       value.
         throw {
           status: 404,
           message: new Error()

@@ -11,7 +11,8 @@ router.use(function(req, res, next) {
 
 firebase.initializeApp(config);
 
-// Testing firebase integration
+// `index` Renders the index route. Mostly used for setting up CORS and
+// initializing Firebase.
 router.get('/', function(req, res, next) {
   res.render('index');
 });
