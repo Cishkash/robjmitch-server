@@ -61,6 +61,9 @@ router.get('/currentuser', function(req, res, next) {
  * `admin/addblog` Allows a user to post a blog and blog post to Firebase given
  * they are already authenticated.
  *
+ * @TODO Consider using `.set` to not only control the key being made for our
+ *       blog entry but also pretty up our uri.
+ *
  * @route admin/addblog
  */
 router.post('/addblog', function(req, res, next) {
