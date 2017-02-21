@@ -72,6 +72,12 @@ router.post('/addblog', function(req, res, next) {
   // Peek user for authentication
   if (user) {
     // Will write the blog data to the `blogs` object in Firebase.
+    // @NOTE Would love to `Promise.all()` but unfortunately, the `posts`
+    //       object requires the key from the initial blog post response. Now,
+    //       using `.set()` here would be better cause then we would be
+    //       formulating the key here and would then be able to use
+    //       `Promise.all()` to handle consecutive calls to Firebase.
+    //       Valuable improvement.
     function writeBlogData() {
       const blogBody = req.body.blogBody;
 
