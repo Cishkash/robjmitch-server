@@ -63,6 +63,7 @@ router.get('/currentuser', function(req, res, next) {
  *
  * @TODO Consider using `.set` to not only control the key being made for our
  *       blog entry but also pretty up our uri.
+ * @TODO Pull this out of the admin route.
  *
  * @route admin/addblog
  */
@@ -76,7 +77,7 @@ router.post('/addblog', function(req, res, next) {
     //       object requires the key from the initial blog post response. Now,
     //       using `.set()` here would be better cause then we would be
     //       formulating the key here and would then be able to use
-    //       `Promise.all()` to handle consecutive calls to Firebase.
+    //       `Promise.all()` to handle concurrent calls to Firebase.
     //       Valuable improvement.
     function writeBlogData() {
       const blogBody = req.body.blogBody;

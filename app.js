@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// Routes routes and routes
+var addArticle = require('./routes/addArticle');
 var admin = require('./routes/admin');
 var blogs = require('./routes/blogs');
 var deleteBlog = require('./routes/deleteBlog');
@@ -28,6 +30,7 @@ app.use('/blogs', blogs);
 app.use('/post', post);
 app.use('/admin', admin);
 app.use('/deleteBlog', deleteBlog);
+app.use('/addArticle', addArticle);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
