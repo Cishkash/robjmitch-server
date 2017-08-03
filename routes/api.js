@@ -21,5 +21,6 @@ router.use('/articles', require('./articles'));
 router.use('/blogs', require('./blogs'));
 router.use('/deleteBlog', require('./deleteBlog'));
 router.use('/post', require('./post'));
+router.use('/updatePost', require('./updatePost'));
 
 module.exports = router;
