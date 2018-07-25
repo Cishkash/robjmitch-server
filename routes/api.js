@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.use(function(req, res, next) {
   // Setup CORS for multiple domains
-  const allowedOrigins = ['http://localhost:3000', 'http://robjmitch.com'];
+  const allowedOrigins = ['http://localhost:3000', 'http://robjmitch.com', 'http://localhost:9000'];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
@@ -22,5 +22,7 @@ router.use('/blogs', require('./blogs'));
 router.use('/deleteBlog', require('./deleteBlog'));
 router.use('/post', require('./post'));
 router.use('/updatePost', require('./updatePost'));
+router.use('/postContact', require('./postContact'));
+
 
 module.exports = router;
