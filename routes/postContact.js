@@ -3,12 +3,12 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/', function(req, res, next) {
-  firebase.database().ref().child('contact').push({
+  return firebase.database().ref().child('contact').push({
     contactName: req.body.contactName,
     message: req.body.contactMessage
   }).then(
-    contact => {
-      res.send({status: 200, message: 'Good job... you, person'})
+    () => {
+      res.status(200).send({message: 'Good job... you, person'})
     }
   ).catch( (err) => {
     res.status(err.status).send(err.message);

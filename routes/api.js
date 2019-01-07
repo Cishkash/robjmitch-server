@@ -23,6 +23,7 @@ router.use('/deleteBlog', require('./deleteBlog'));
 router.use('/post', require('./post'));
 router.use('/updatePost', require('./updatePost'));
 router.use('/postContact', require('./postContact'));
+router.use('/userLoggedIn', require('./userLoggedIn'));
 
 
 module.exports = router;
