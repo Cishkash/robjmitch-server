@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/login', function(req, res, next) {
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password).then(
     (response) => {
-      res.status(200).send(response);
+      res.status(200).send(`User ${req.body.email} is logged in!`);
     }
   ).catch(
     (err) => {
